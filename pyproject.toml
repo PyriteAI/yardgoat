@@ -10,6 +10,7 @@ python = "^3.6"
 boto3 = "^1.12.36"
 docker = "^4.2.0"
 toml = "^0.10.0"
+attrs = "^19.3.0"
 
 [tool.poetry.dev-dependencies]
 black = "^19.10b0"
