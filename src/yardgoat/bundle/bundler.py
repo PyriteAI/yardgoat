@@ -77,4 +77,4 @@ def create_bundle(path: PathLike) -> BundleInfo:
         return BundleInfo(config=config, tarfile=tarfile)
 
 
-__all__ = ["BundleInfo", "create_bundle"]
+__all__ = ["BUNDLE_CONFIG_FILENAME", "BundleInfo", "create_bundle"]
