@@ -7,7 +7,7 @@ import uuid
 
 import attr
 
-from .config import BundleConfig, load
+from .config import BundleConfig, load, loads
 from .exceptions import BundleConfigNotPresent
 from ..types import PathLike
 
@@ -31,6 +31,20 @@ class BundleInfo:
         config (BundleConfig): Configuration data for the Bundle.
         tarfile (pathlib.PurePath): The path to the Bundle tar file.
     """
+
+    @classmethod
+    def from_bundle_file(cls, path: PathLike) -> "BundleInfo":
+        with TarFile(path, mode="r") as f:
+            try:
+                reader = f.extractfile(BUNDLE_CONFIG_FILENAME)
+            except KeyError as e:
+                raise BundleConfigNotPresent(
+                    f"invalid Bundle - no {BUNDLE_CONFIG_FILENAME} file found"
+                ) from e
+            else:
+                data = reader.read().decode("utf-8")
+                config = loads(data)
+                return cls(config, pathlib.Path(path))
 
     config: BundleConfig = attr.ib()
     tarfile: pathlib.PurePath = attr.ib()
