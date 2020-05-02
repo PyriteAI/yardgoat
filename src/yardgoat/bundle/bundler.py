@@ -91,4 +91,38 @@ def create_bundle(path: PathLike) -> BundleInfo:
         return BundleInfo(config=config, tarfile=tarfile)
 
 
-__all__ = ["BUNDLE_CONFIG_FILENAME", "BundleInfo", "create_bundle"]
+def extract(bundle: BundleInfo, destination: Optional[PathLike] = None):
+    """Extract the Bundle to the specified directory.
+
+    Args:
+        bundle (BundleInfo): The Bundle to extract.
+        destination (PathLike, optional): The location to place the contents of the
+            Bundle. Defaults to the current working directory.
+    """
+
+    with TarFile(bundle.tarfile, mode="r") as tar:
+        tar.extractall(destination)
+
+
+def extract_volume_files(bundle: BundleInfo, destination: Optional[PathLike] = None):
+    """Extract all files listed as a volume of the Bundle to the specified directory.
+
+    Args:
+        bundle (BundleInfo): The Bundle from which to extract the volume files.
+        destination (PathLike, optional): The location to place the contents of the
+            Bundle. Defaults to the current working directory.
+    """
+
+    with TarFile(bundle.tarfile, mode="r") as tar:
+        members = tar.getmembers()
+        members = [member for member in members if member.name in bundle.config.volumes]
+        tar.extractall(path=destination, members=members)
+
+
+__all__ = [
+    "BUNDLE_CONFIG_FILENAME",
+    "BundleInfo",
+    "create_bundle",
+    "extract",
+    "extract_volume_files",
+]
