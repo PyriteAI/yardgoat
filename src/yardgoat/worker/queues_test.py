@@ -67,6 +67,11 @@ def test_SQSJobQueue_get_open_request(sqs_job_queue, open_job):
     assert actual == open_job
 
 
+def test_SQSJobQueue_get_open_request_timeout(sqs_job_queue):
+    actual = sqs_job_queue.get_open_request(timeout=0)
+    assert actual is None
+
+
 def test_SQSJobQueue_mark_completed(sqs_job_queue, completed_job):
     sqs_job_queue.mark_completed(completed_job)
 
