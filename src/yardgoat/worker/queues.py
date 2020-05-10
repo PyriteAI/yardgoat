@@ -9,6 +9,21 @@ from .types import *
 
 
 class SQSJobQueue(JobQueue):
+    """An AWS SQS backed job queue.
+
+    This class implements the :class:`JobQueue` protocol, and utlizes AWS SQS to queue
+    jobs. Note that this implementation is actually backed to two separate SQS queues:
+    the first is for open jobs, and the second is for completed jobs.
+
+    Args:
+        open (boto3.resources.factory.sqs.Queue): The queue for open requests.
+        completed (boto3.resources.factory.sqs.Queue): The queue for completed requests.
+
+    Attributes:
+        open (boto3.resources.factory.sqs.Queue): The queue for open requests.
+        completed (boto3.resources.factory.sqs.Queue): The queue for completed requests.
+    """
+
     def __init__(
         self,
         open: "boto3.resources.factory.sqs.Queue",
